@@ -18,7 +18,6 @@ along with OpenSesame.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from libopensesame.py3compat import *
-import pygame
 from openexp._canvas import canvas
 from openexp._canvas._gabor.gabor import Gabor
 from openexp._canvas._element.xpyriment import XpyrimentElement
@@ -29,18 +28,11 @@ class Xpyriment(XpyrimentElement, Gabor):
 
 	def prepare(self):
 
-		im = canvas._gabor(
-			self.orient,
-			self.freq,
-			self.env,
-			self.size,
-			self.stdev,
-			self.phase,
-			self.col1,
-			self.col2,
-			self.bgmode
-		)
-		surface = pygame.image.fromstring(im.tobytes(), im.size, u'RGB')
 		self._stim = Visual(position=self.to_xy(self.x, self.y))
-		self._stim.set_surface(surface)
+		self._stim.set_surface(
+			canvas._gabor(
+				self.orient, self.freq, self.env, self.size, self.stdev,
+				self.phase, self.col1, self.col2, self.bgmode
+			)
+		)
 		self._stim.preload()
